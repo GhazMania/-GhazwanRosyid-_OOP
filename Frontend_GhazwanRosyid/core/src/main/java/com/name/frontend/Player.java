@@ -1,16 +1,28 @@
 package com.name.frontend;
 
-public class Player {
+import java.awt.*;
+
+public class Player extends GameObject {
     String name;
     int hp;
     int maxHp;
     int power;
     int spellCards;
+    long score;
     public Player(String name, int hp, int power, int spellCards){
-        this.name = "Reimu Hakurei";
-        this.hp = 100;
-        this.power = 15;
-        this.spellCards = 3;
+        super(280,40,32,32,0, Color.RED);
+        this.name = name;
+        this.hp = hp;
+        this.power = power;
+        this.spellCards = spellCards;
+    }
+
+    public Player(float x, float y, String name, int hp, int power, int spellCards){
+        super(x,y,32,32,0, Color.RED);
+        this.name = name;
+        this.hp = hp;
+        this.power = power;
+        this.spellCards = spellCards;
     }
     public void takeDamage(int damage) {
         // 1. Reduce hp by the damage value.
@@ -42,4 +54,11 @@ public class Player {
         }else
             return false;
     }
+    public void addScore(long points) {
+        // TODO: Add the value to the player's score if points is greater than 0.
+        if(points>0){
+            this.score=this.score+points;
+        }
+    }
+
 }

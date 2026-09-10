@@ -1,22 +1,39 @@
 package com.name.frontend;
 
-public class Enemy {
+import java.awt.*;
+
+public class Enemy extends GameObject {
     String name;
     int hp;
     int maxHp;
+    protected long scoreValue;
     public Enemy(String name, int hp){
-        this.name = "Cirno";
-        this.hp = 100;
-        this.maxHp = 15;
+        super(200,380,24,24,0, Color.PINK);
+        this.name = name;
+        this.hp = hp;
+        this.maxHp = hp;
+        this.scoreValue=100;
     }
-    public void takeDamage(int damage) {
+
+    public Enemy(float x, float y, float width, float height, Color color, String name, int hp, long scoreValue){
+        super(x,y,24,24,0, Color.PINK);
+        this.name = name;
+        this.hp = hp;
+        this.maxHp = hp;
+        this.scoreValue=scoreValue;
+    }
+
+
+    public boolean takeDamage(int damage) {
         this.hp = hp-damage;
         // 2. HP must not become negative.
         if(this.hp<0){
             this.hp=0;
             System.out.println("[" +this.name +"] was defeated\n");
+            return true;
         }else {
             System.out.println("["+ this.name +"] took " + damage + " damage! HP: ["+ this.hp +"/"+this.maxHp+"]\n");
+            return false;
         }
     }
 
