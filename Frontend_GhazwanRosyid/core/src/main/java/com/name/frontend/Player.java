@@ -26,23 +26,14 @@ public class Player extends GameObject {
     }
     public void takeDamage(int damage) {
         // 1. Reduce hp by the damage value.
-        this.hp = hp-damage;
+        setHp(getHp() - damage);
         // 2. HP must not become negative.
-        if(this.hp<0){
-            this.hp=0;
-            System.out.println("You lose\n");
-        }else {
-            // 3. If HP is still greater than 0, display the remaining HP in the format: [PlayerName] took [damage] damage! Remaining HP: [hp]
-            System.out.println("["+ this.name +"] took " + damage + " damage! Remaining HP: ["+ this.hp +"]\n");
-        }
         // 4. If HP reaches 0, display a message that the Player has been defeated.
     }
     public void shoot(Enemy target) {
         // 1. Create an int named damage, calculated by adding 10 to power.
-        int damage = this.power + 10;
-
-        // 2. Display information that the Player is shooting the Enemy, in the format: [name] shoots [TargetName] dealing [damage] DMG!
-        System.out.println("[" +this.name+ "] shoots [" + target.name+ "] dealing [" +damage+ "] DMG!");
+        int damage = 10 + getPower();
+        System.out.println(getName() + " shoots " + target.getName() + " dealing " + damage + " DMG!");
         // 3. Call the Enemy object's takeDamage() method.
         target.takeDamage(damage);
     }
@@ -56,9 +47,48 @@ public class Player extends GameObject {
     }
     public void addScore(long points) {
         // TODO: Add the value to the player's score if points is greater than 0.
-        if(points>0){
-            this.score=this.score+points;
+        if (points > 0) {
+            this.score += points;
+            System.out.println(getName() + " gained " + points + " pts! Total Score: " + this.score);
         }
+    }
+
+    public void collectItem(Item item) {
+        System.out.println(getName() + " collected " + item.getItemType() + "!");
+        if (item.getScoreValue() > 0) {
+            addScore(item.getScoreValue());
+        }
+    }
+
+
+    //Getters and Setters
+    public void setHp(int hp) {
+        this.hp = Math.max(0, hp);
+    }
+    public int getHp(){
+        return hp;
+    }
+    public void setName(String name) {
+        this.name=name;
+    }
+    public String getName(){
+        return name;
+    }
+    public void setPower(int power){
+        this.power=power;
+    }
+    public int getPower(){
+        return power;
+    }
+    public void setSpellCards(int spellCards){
+        this.spellCards=spellCards;
+    }
+    public int getSpellCards(){
+        return spellCards;
+    }
+
+    public long getScore(){
+        return score;
     }
 
 }

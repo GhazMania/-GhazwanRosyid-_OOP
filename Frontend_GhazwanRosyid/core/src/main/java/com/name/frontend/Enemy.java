@@ -25,10 +25,9 @@ public class Enemy extends GameObject {
 
 
     public boolean takeDamage(int damage) {
-        this.hp = hp-damage;
+        setHp(getHp() - damage);
         // 2. HP must not become negative.
-        if(this.hp<0){
-            this.hp=0;
+        if(getHp()<0){
             System.out.println("[" +this.name +"] was defeated\n");
             return true;
         }else {
@@ -39,7 +38,7 @@ public class Enemy extends GameObject {
 
     public void attack(Player player, int damage) {
         // 1. Display information that the Enemy is attacking the Player, in the format: [EnemyName] unleashes bullet barrage on [PlayerName]!
-        System.out.println("[" +this.name+ "] unleashes bullet barrage on [" +player.name+ "]!\n");
+        System.out.println("[" +this.name+ "] unleashes bullet barrage on [" +getName()+ "]!\n");
         // 2. Call the Player's takeDamage() method using the given damage.
         player.takeDamage(damage);
     }
@@ -50,5 +49,32 @@ public class Enemy extends GameObject {
         }else
             return false;
     }
+
+    //Setters and Getters
+    public void setHp(int hp) {
+        this.hp = Math.max(0, hp);
+    }
+    public int getHp(){
+        return hp;
+    }
+
+    public void setName(String name) {
+        this.name=name;
+    }
+    public String getName(){
+        return name;
+    }
+
+    public int getMaxHp(){
+        return maxHp;
+    }
+
+    public void setScoreValue(long scoreValue){
+        this.scoreValue=scoreValue;
+    }
+    public long getScoreValue(){
+        return scoreValue;
+    }
+
 
 }

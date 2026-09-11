@@ -19,7 +19,16 @@ public class Item extends GameObject {
         this.itemType=itemType;
         this.scoreValue=scoreValue;
     }
+    @Override
     public void update(float delta){
         this.y=this.y-speed*delta;
+    }
+
+    //Getters Setters
+    public String getItemType(){
+        return itemType;
+    }
+    public long getScoreValue(){
+        return scoreValue;
     }
 }
