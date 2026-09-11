@@ -3,12 +3,12 @@ package com.name.frontend;
 import java.awt.*;
 
 public class Player extends GameObject {
-    String name;
-    int hp;
-    int maxHp;
-    int power;
-    int spellCards;
-    long score;
+    private String name;
+    private int hp;
+    private int maxHp;
+    private int power;
+    private int spellCards;
+    private long score;
     public Player(String name, int hp, int power, int spellCards){
         super(280,40,32,32,0, Color.RED);
         this.name = name;
