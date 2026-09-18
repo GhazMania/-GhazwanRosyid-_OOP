@@ -1,4 +1,7 @@
-package com.name.frontend;
+package com.name.frontend.enemies;
+
+import com.name.frontend.objects.GameObject;
+import com.name.frontend.objects.Player;
 
 import java.awt.*;
 

@@ -1,11 +1,12 @@
-package com.name.frontend;
+package com.name.frontend.objects;
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import java.awt.*;
+import com.badlogic.gdx.math.Rectangle;
 
 //Single inheritance from GameObject
 
-public class GameObject {
+public abstract class GameObject implements Collidable {
     protected float x;
     protected float y;
     protected float width;
@@ -61,6 +62,34 @@ public class GameObject {
 
     public Color getColor(){
         return color;
+    }
+    public float getWidth() {
+        return width;
+    }
+
+    public float getHeight() {
+        return height;
+    }
+
+    public float getSpeed() {
+        return speed;
+    }
+
+    @Override
+    public Rectangle getCoreHitbox() {
+        // TODO: return a new Rectangle matching this object's x, y, width, height
+        return new Rectangle(x,y,width,height);
+    }
+
+    @Override
+    public Rectangle getGrazeHitbox() {
+        // TODO: return a Rectangle with +10px padding on every side
+        return new Rectangle(x+10,y+10,width+10,height+10);
+    }
+
+    @Override
+    public void onCollision(Collidable other) {
+        // Base collision handler (can be overridden by subclasses that need to react)
     }
 
 
