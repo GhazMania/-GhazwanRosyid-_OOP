@@ -1,7 +1,7 @@
 package com.name.frontend.objects;
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import java.awt.*;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Rectangle;
 
 //Single inheritance from GameObject
@@ -27,6 +27,8 @@ public abstract class GameObject implements Collidable {
     }
     //Renderer
     public void render(ShapeRenderer shapeRenderer){
+        shapeRenderer.setColor(this.color);
+        shapeRenderer.rect(this.x,this.y,this.width,this.height);
     }
 
     //Setters and Getters

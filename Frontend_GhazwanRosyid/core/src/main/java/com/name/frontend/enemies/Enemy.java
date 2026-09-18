@@ -2,8 +2,7 @@ package com.name.frontend.enemies;
 
 import com.name.frontend.objects.GameObject;
 import com.name.frontend.objects.Player;
-
-import java.awt.*;
+import com.badlogic.gdx.graphics.Color;
 
 public class Enemy extends GameObject {
     String name;
@@ -19,7 +18,7 @@ public class Enemy extends GameObject {
     }
 
     public Enemy(float x, float y, float width, float height, Color color, String name, int hp, long scoreValue){
-        super(x,y,24,24,0, Color.PINK);
+        super(x,y,24,24,0, color);
         this.name = name;
         this.hp = hp;
         this.maxHp = hp;

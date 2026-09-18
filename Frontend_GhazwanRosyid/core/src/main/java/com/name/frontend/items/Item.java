@@ -1,8 +1,7 @@
 package com.name.frontend.items;
 
 import com.name.frontend.objects.GameObject;
-
-import java.awt.*;
+import com.badlogic.gdx.graphics.Color;
 
 public class Item extends GameObject {
     private String itemType;
@@ -30,8 +29,8 @@ public class Item extends GameObject {
         this.itemType = itemTypeEnum.name();
     }
 
-    public Item(int x, int y,float width, float height, float speed, ItemType itemTypeEnum, int scoreValue){
-        super(x,y,16,16,100F,Color.WHITE);
+    public Item(float x, float y,float width, float height, float speed, ItemType itemTypeEnum, float scoreValue){
+        super(x,y,width,height,speed,Color.WHITE);
         this.scoreValue=itemTypeEnum.getScoreValue();
         this.itemTypeEnum=itemTypeEnum;
         this.itemType = itemTypeEnum.name();
