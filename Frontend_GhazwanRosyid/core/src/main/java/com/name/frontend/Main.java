@@ -78,7 +78,7 @@ public class Main extends ApplicationAdapter {
         {
             T target = itr.next();
             target.update(delta);
-            if (target.isOffScreen(screenWidth,screenHeight)){
+            if (target.isOffScreen(screenWidth,screenHeight)|| target.isDestroyed()){
                 System.out.println("Removed via Generic Iterator: "+ target.getClass().getSimpleName());
                 itr.remove();
             }

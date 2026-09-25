@@ -30,10 +30,8 @@ public abstract class GameObject implements Collidable {
     }
     //Renderer
     public void render(ShapeRenderer shapeRenderer) {
-        if (shapeRenderer != null && color != null && this.active==true) {
-            shapeRenderer.setColor(color);
-            shapeRenderer.rect(x, y, width, height);
-        }
+        shapeRenderer.setColor(this.color);
+        shapeRenderer.rect(this.x, this.y, this.width, this.height);
     }
 
     //Setters and Getters
@@ -104,22 +102,22 @@ public abstract class GameObject implements Collidable {
     //==============================================
     public boolean isDestroyed() {
         // TODO: return true if the object is NOT active (active == false)
-        if (this.active==false)
+        if (active==false)
             return true;
         else
-            return true;
+            return false;
     }
 
     public void destroy() {
         // TODO: mark this object as inactive
-        this.active=false;
+        active=false;
     }
 
     public boolean isOffScreen(float screenWidth, float screenHeight) {
         // TODO: return true if the x or y position is outside the screen boundaries
         // Use a 50px tolerance margin on each side, so objects that have only
         // slightly passed the edge of the screen are not immediately considered gone.
-        if (x>screenWidth+50 || x<-50 || y>screenHeight+50 || y<-50)
+        if (x-50>screenWidth || x<-50 || y-50>screenHeight || y<-50)
             return true;
         else
             return false;
