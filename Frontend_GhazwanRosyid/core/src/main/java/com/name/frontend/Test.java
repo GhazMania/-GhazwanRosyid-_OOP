@@ -5,6 +5,7 @@ import com.name.frontend.enemies.Enemy;
 import com.name.frontend.enemies.Fairy;
 import com.name.frontend.items.Item;
 import com.name.frontend.objects.Player;
+import com.name.frontend.objects.bullets.Bullet;
 
 public class Test {
     public static void main(String[] args) {
@@ -62,5 +63,11 @@ public class Test {
         System.out.println("Final Score: " + reimu2.getScore() + " pts");
 
         System.out.println("\n=== Module 2 Test Completed Successfully ===");
+
+        Bullet bullet = reimu.shootBullet();
+        System.out.println("Bullet created at: (" + bullet.getX() + ", " + bullet.getY() + ") | Damage: " + bullet.getDamage());
+        bullet.update(0.1f);
+        System.out.println("Bullet Y after 0.1s: " + bullet.getY());
+        System.out.println("Is bullet off screen? " + bullet.isOffScreen(640, 480));
     }
 }

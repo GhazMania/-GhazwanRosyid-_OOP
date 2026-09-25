@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.name.frontend.enemies.Enemy;
 import com.name.frontend.items.Item;
 import com.name.frontend.items.ItemType;
+import com.name.frontend.objects.bullets.Bullet;
 
 import java.awt.*;
 
@@ -98,6 +99,12 @@ public class Player extends GameObject {
             addScore(item.getScoreValue());
             System.out.println(name + " collected " + item.getItemType() + "!");
         }
+
+        if (item.isDestroyed()) return; // Prevent the item from being collected twice in the same frame
+        // ... switch-case for the item type that you created previously ...
+        // TODO: Mark this item as destroyed so it can later be removed by the Iterator
+        // Call the item's destroy() method here!
+        destroy();
     }
 
     @Override
@@ -130,6 +137,9 @@ public class Player extends GameObject {
             else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)){
                 x += speed*delta;
             }
+            else if (Gdx.input.isKeyPressed(Input.Keys.D)){
+                x += speed*delta;
+            }
         }
     }
 
@@ -140,6 +150,19 @@ public class Player extends GameObject {
             // TODO: Print "Player touches items" then call collectItem((Item) other)
             collectItem((Item) other);
         }
+    }
+
+    //============================
+    //Module 4
+    //============================
+
+    public Bullet shootBullet() {
+        int damage = 10 + power;
+        System.out.println(name + " shoots bullet dealing " + damage + " DMG!");
+        // TODO: return a new Bullet positioned at the top-center of the Player
+        // (x + width/2 - 4, y + height), with BulletType.AMULET as its type,
+        // and the damage calculated above
+        return new Bullet(x + width/2 - 4, y + height, BulletType.AMULET, damage);
     }
 
 
