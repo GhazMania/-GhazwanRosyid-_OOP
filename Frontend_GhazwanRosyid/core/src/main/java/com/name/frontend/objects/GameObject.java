@@ -30,8 +30,10 @@ public abstract class GameObject implements Collidable {
     }
     //Renderer
     public void render(ShapeRenderer shapeRenderer) {
-        shapeRenderer.setColor(this.color);
-        shapeRenderer.rect(this.x, this.y, this.width, this.height);
+        if (shapeRenderer != null && color != null && active==true) {
+            shapeRenderer.setColor(color);
+            shapeRenderer.rect(x, y, width, height);
+        }
     }
 
     //Setters and Getters
