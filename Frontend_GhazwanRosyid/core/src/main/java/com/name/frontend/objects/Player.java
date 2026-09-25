@@ -104,7 +104,7 @@ public class Player extends GameObject {
         // ... switch-case for the item type that you created previously ...
         // TODO: Mark this item as destroyed so it can later be removed by the Iterator
         // Call the item's destroy() method here!
-        destroy();
+        item.destroy();
     }
 
     @Override
