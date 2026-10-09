@@ -1,11 +1,11 @@
-package com.name.frontend;
+package com.ghazwan.frontend;
 
-import com.name.frontend.enemies.Boss;
-import com.name.frontend.enemies.Enemy;
-import com.name.frontend.enemies.Fairy;
-import com.name.frontend.items.Item;
-import com.name.frontend.objects.Player;
-import com.name.frontend.objects.bullets.Bullet;
+import com.ghazwan.frontend.objects.enemies.Boss;
+import com.ghazwan.frontend.objects.enemies.Enemy;
+import com.ghazwan.frontend.objects.enemies.Fairy;
+import com.ghazwan.frontend.objects.items.Item;
+import com.ghazwan.frontend.objects.Player;
+import com.ghazwan.frontend.objects.bullets.Bullet;
 
 public class Test {
     public static void main(String[] args) {

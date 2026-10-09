@@ -1,27 +1,32 @@
-package com.name.frontend;
+package com.ghazwan.frontend;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.name.frontend.enemies.Boss;
-import com.name.frontend.enemies.Fairy;
-import com.name.frontend.items.Item;
-import com.name.frontend.items.ItemType;
-import com.name.frontend.objects.GameObject;
-import com.name.frontend.objects.Player;
+import com.ghazwan.frontend.objects.enemies.Boss;
+import com.ghazwan.frontend.objects.enemies.Fairy;
+import com.ghazwan.frontend.objects.items.Item;
+import com.ghazwan.frontend.objects.items.ItemType;
+import com.ghazwan.frontend.objects.GameObject;
+import com.ghazwan.frontend.objects.Player;
 import com.badlogic.gdx.Input;
-import com.name.frontend.objects.bullets.Bullet;
+import com.ghazwan.frontend.systems.AssetManager;
+import com.ghazwan.frontend.systems.EntityFactory;
 
 import java.util.Iterator;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.ghazwan.frontend.systems.EntityFactory.*;
+
 public class Main extends ApplicationAdapter {
     private ShapeRenderer shapeRenderer;
 
     // TODO 1: Declare fields for Player, Fairy, Boss, Items, and List<GameObject>
+    SpriteBatch batch;
     Player playerObject;
     Fairy fairyObject;
     Boss bossObject;
@@ -32,35 +37,36 @@ public class Main extends ApplicationAdapter {
 
     @Override
     public void create() {
-        shapeRenderer = new ShapeRenderer();
-        entities = new ArrayList<>();
+        // TODO 1:
+        // When initializing the renderer, create a SpriteBatch and store it in batch.
+        // LibGDX hint: new SpriteBatch().
+        batch = new SpriteBatch();
 
-        // TODO 2: Instantiate Player (Red square) at (280, 40)
-        playerObject = new Player(280,40,"Red Square", 100, 15,3);
-
-        // TODO 3: Instantiate Fairy (Pink square) at (150, 380)
-        fairyObject = new Fairy(150, 380, "Pink Square", 100);
-
-
-        // TODO 4: Instantiate Boss (Blue square) at (380, 400)
-        bossObject = new Boss(380, 400, "Blue Square", 100);
+        // TODO 2:
+        // Initialize the fairy and entities lists as empty ArrayLists.
+        ArrayList<Fairy> fairyList = new ArrayList<>();
+        ArrayList<GameObject> entityList = new ArrayList<>();
 
 
-        // TODO 5: Instantiate Items (White squares) with downward speeds
-        itemObject = new Item(300,300,"String");
-        powerItem = new Item(200, 450, 16, 16, 80f, ItemType.POWER, 500L);
-        pointItem = new Item(320, 480, 12, 12, 120f, ItemType.POINT, 1000L);
+        // TODO 3:
+        // Before creating entities, get the AssetManager instance and call init().
+        AssetManager.getInstance().init();
 
+        // TODO 4:
+        // Update how all entities are created! Follow the table and create Player, Fairy, Boss, and Item
+        // using the appropriate EntityFactory methods.
+        // Add both Fairies to the fairy list using add(...).
+        fairyList.add(createFairy(150,380,"Red Fairy", 20));
+        fairyList.add(createFairy(250, 380, "Blue Fairy", 20, "fairy_idle_blue"));
 
-        // TODO 6: Add all entities into the gameObjects list polymorphically
-        entities.add(playerObject);
-        entities.add(fairyObject);
-        entities.add(bossObject);
-        entities.add(itemObject);
-        entities.add(powerItem);
-        entities.add(pointItem);
-
+        // TODO 5:
+        // Add all the objects you have just created to entities.
+        entityList.add(createPlayer(280, 40, "Reimu Hakurei", 100, 15, 3));
+        entityList.add(createBoss(380, 400, "Rumia", 150));
+        entityList.add(createItem(200, 450, ItemType.POWER));
+        entityList.add(createItem(320, 480, ItemType.POINT));
     }
+
 
     public <T extends GameObject> void updateAndClean(List<T> list, float delta, float screenWidth, float screenHeight) {
         // 1. Get an Iterator<T> from the given list.
@@ -92,8 +98,8 @@ public class Main extends ApplicationAdapter {
 
         // TODO 1: If the Z key was just pressed, add a new bullet from player.shootBullet()
         // to the entities list.
-        // Clue: Gdx.input.isKeyJustPressed()
-        if (Gdx.input.isKeyPressed(Input.Keys.Z)){
+        // Clue: Gdx.input.isKeyJustPressed()z
+        if (Gdx.input.isKeyJustPressed(Input.Keys.Z)){
             entities.add(playerObject.shootBullet());
         }
 
@@ -127,14 +133,29 @@ public class Main extends ApplicationAdapter {
             }
         }
         shapeRenderer.end();
+
+        // ... Keep the code above unchanged
+        ScreenUtils.clear(0.1f, 0.1f, 0.15f, 1f);
+
+        batch.begin();
+        for (GameObject entity : entities) {
+            if (!entity.isDestroyed()) {
+                // TODO: Call each entity's .render() method with the SpriteBatch as its argument.
+                entity.render(batch);
+            }
+        }
+        batch.end();
     }
 
 
 
     @Override
     public void dispose() {
-        if (shapeRenderer != null) {
-            shapeRenderer.dispose();
+        if (batch != null) {
+            batch.dispose();
         }
+
+        // TODO: Call dispose on AssetManager to release the loaded Textures as well.
+        AssetManager.getInstance().dispose();
     }
 }

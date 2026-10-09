@@ -1,4 +1,4 @@
-package com.name.frontend.objects;
+package com.ghazwan.frontend.objects.bullets;
 
 public enum BulletType {
     DANMAKU,

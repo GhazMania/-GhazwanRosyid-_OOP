@@ -1,13 +1,16 @@
-package com.name.frontend.objects;
+package com.ghazwan.frontend.objects;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.name.frontend.enemies.Enemy;
-import com.name.frontend.items.Item;
-import com.name.frontend.items.ItemType;
-import com.name.frontend.objects.bullets.Bullet;
-
-import java.awt.*;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.ghazwan.frontend.objects.bullets.BulletType;
+import com.ghazwan.frontend.objects.enemies.Enemy;
+import com.ghazwan.frontend.objects.items.Item;
+import com.ghazwan.frontend.objects.items.ItemType;
+import com.ghazwan.frontend.objects.bullets.Bullet;
+import com.ghazwan.frontend.systems.AssetManager;
+import com.ghazwan.frontend.systems.EntityFactory;
 
 public class Player extends GameObject {
     private String name;
@@ -16,8 +19,9 @@ public class Player extends GameObject {
     private int power;
     private int spellCards;
     private long score;
+    private int currentDir;
     public Player(String name, int hp, int power, int spellCards){
-        super(280,40,32,32,200f, Color.RED);
+        super(280,40,32,48,200f, Color.RED);
         this.name = name;
         this.hp = hp;
         this.power = power;
@@ -25,7 +29,7 @@ public class Player extends GameObject {
     }
 
     public Player(float x, float y, String name, int hp, int power, int spellCards){
-        super(x,y,32,32,200f, Color.RED);
+        super(x,y,32,48,200f, Color.RED);
         this.name = name;
         this.hp = hp;
         this.power = power;
@@ -109,39 +113,85 @@ public class Player extends GameObject {
 
     @Override
     public void update(float delta) {
+        // TODO 1: Call GameObject's update(delta) through super.
+        super.update(delta);
+
+        // TODO 2: Declare a local float variable dx with an initial value of 0
+        // (dx = delta x, tracks the change in horizontal direction for animation)
+        float dx = 0;
         if (Gdx.input != null) {
-            // TODO: Check W / UP input   → y += speed * delta
-            if (Gdx.input.isKeyPressed(Input.Keys.W)){
-                y += speed * delta;
-            } else if (Gdx.input.isKeyPressed(Input.Keys.UP)){
+            if (Gdx.input.isKeyPressed(Input.Keys.W) || Gdx.input.isKeyPressed(Input.Keys.UP)) {
                 y += speed * delta;
             }
-            // TODO: Check S / DOWN input → y -= speed * delta
-            else if (Gdx.input.isKeyPressed(Input.Keys.S)){
-                y -= speed*delta;
+            if (Gdx.input.isKeyPressed(Input.Keys.S) || Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+                y -= speed * delta;
             }
-            else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)){
-                y -= speed*delta;
+            if (Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+                x -= speed * delta;
+                // TODO 3: Adjust dx to match the direction.
+                // (If you move left, what should happen to dx?)
+                dx -= 1;
             }
-            // TODO: Check A / LEFT input → x -= speed * delta
-            else if (Gdx.input.isKeyPressed(Input.Keys.A)){
-                x -= speed*delta;
+            if (Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+                x += speed * delta;
+                // TODO 4: Adjust dx to match the direction.
+                // (If you move right, what should happen to dx?)
+                dx += 1;
             }
-            else if (Gdx.input.isKeyPressed(Input.Keys.LEFT)){
-                x -= speed*delta;
+        }
+
+        // TODO 5: Call updateAnimationState(dx)
+        updateAnimationState(dx);
+    }
+
+    public void updateAnimationState(float dx) {
+        AssetManager assets = AssetManager.getInstance();
+        if (dx < 0) {
+            // TODO:
+            // 1. Only make the following changes if currentDir is not -1.
+            if (currentDir != -1) {
+                // 2. Set currentDir to -1.
+                currentDir = -1;
             }
-            // TODO: Check D / RIGHT input → x += speed * delta
-            else if (Gdx.input.isKeyPressed(Input.Keys.A)){
-                x += speed*delta;
+            // 3. Retrieve the "player_left" animation using assets.getAnimation(...).
+            //    Store it in a local variable of type Animation<TextureRegion> named anim.
+            Animation<TextureRegion> anim = assets.getAnimation("player_left");
+            // 4. If anim is not null, assign it using setAnimation(...).
+            if (anim!=null){
+                setAnimation(anim);
             }
-            else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)){
-                x += speed*delta;
+        } else if (dx > 0) {
+            // TODO:
+            // 1. Only make the following changes if currentDir is not 1.
+            if (currentDir != 1) {
+                // 2. Set currentDir to -1.
+                currentDir = 1;
             }
-            else if (Gdx.input.isKeyPressed(Input.Keys.D)){
-                x += speed*delta;
+            // 3. Retrieve the "player_right" animation using assets.getAnimation(...).
+            //    Store it in a local variable of type Animation<TextureRegion> named anim.
+            Animation<TextureRegion> anim = assets.getAnimation("player_right");
+            // 4. If anim is not null, assign it using setAnimation(...).
+            if (anim!=null){
+                setAnimation(anim);
+            }
+        } else {
+            // TODO:
+            // 1. Only make the following changes if currentDir is not 0.
+            // 2. Set currentDir to 0.
+            if (currentDir != 0) {
+                // 2. Set currentDir to -1.
+                currentDir = 0;
+            }
+            // 3. Retrieve the "player_idle" animation using assets.getAnimation(...).
+            //    Store it in a local variable of type Animation<TextureRegion> named anim.
+            Animation<TextureRegion> anim = assets.getAnimation("player_right");
+            // 4. If anim is not null, assign it using setAnimation(...).
+            if (anim!=null){
+                setAnimation(anim);
             }
         }
     }
+
 
     @Override
     public void onCollision(Collidable other) {
@@ -159,11 +209,11 @@ public class Player extends GameObject {
     public Bullet shootBullet() {
         int damage = 10 + power;
         System.out.println(name + " shoots bullet dealing " + damage + " DMG!");
-        // TODO: return a new Bullet positioned at the top-center of the Player
-        // (x + width/2 - 4, y + height), with BulletType.AMULET as its type,
-        // and the damage calculated above
-        return new Bullet(x + width/2 - 4, y + height, BulletType.AMULET, damage);
+        // TODO: Return a Bullet using EntityFactory
+        // with the same x and y formulas as in the previous implementation
+        return EntityFactory.createPlayerBullet(x,y,damage);
     }
+
 
 
 

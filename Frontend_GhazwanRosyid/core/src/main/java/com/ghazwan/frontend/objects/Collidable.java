@@ -1,4 +1,4 @@
-package com.name.frontend.objects;
+package com.ghazwan.frontend.objects;
 
 import com.badlogic.gdx.math.Rectangle;
 

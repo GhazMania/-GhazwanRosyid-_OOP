@@ -1,4 +1,4 @@
-package com.name.frontend.items;
+package com.ghazwan.frontend.objects.items;
 
 public enum ItemType {
     POWER(100L, 1),   // +100 score, +1 power bonus

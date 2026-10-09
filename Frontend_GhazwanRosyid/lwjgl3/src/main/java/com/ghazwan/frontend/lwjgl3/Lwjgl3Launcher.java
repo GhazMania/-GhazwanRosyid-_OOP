@@ -1,8 +1,8 @@
-package com.name.frontend.lwjgl3;
+package com.ghazwan.frontend.lwjgl3;
 
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-import com.name.frontend.Main;
+import com.ghazwan.frontend.Main;
 
 /** Launches the desktop (LWJGL3) application. */
 public class Lwjgl3Launcher {

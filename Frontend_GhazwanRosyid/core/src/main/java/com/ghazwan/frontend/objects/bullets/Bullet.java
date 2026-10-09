@@ -1,9 +1,8 @@
-package com.name.frontend.objects.bullets;
+package com.ghazwan.frontend.objects.bullets;
 
-import com.name.frontend.enemies.Enemy;
-import com.name.frontend.objects.BulletType;
-import com.name.frontend.objects.Collidable;
-import com.name.frontend.objects.GameObject;
+import com.ghazwan.frontend.objects.enemies.Enemy;
+import com.ghazwan.frontend.objects.Collidable;
+import com.ghazwan.frontend.objects.GameObject;
 import com.badlogic.gdx.graphics.Color;
 
 public class Bullet extends GameObject {

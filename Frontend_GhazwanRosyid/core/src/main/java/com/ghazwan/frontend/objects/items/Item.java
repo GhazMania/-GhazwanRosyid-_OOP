@@ -1,6 +1,6 @@
-package com.name.frontend.items;
+package com.ghazwan.frontend.objects.items;
 
-import com.name.frontend.objects.GameObject;
+import com.ghazwan.frontend.objects.GameObject;
 import com.badlogic.gdx.graphics.Color;
 
 public class Item extends GameObject {
