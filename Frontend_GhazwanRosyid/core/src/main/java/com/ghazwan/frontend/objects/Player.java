@@ -10,6 +10,7 @@ import com.ghazwan.frontend.objects.items.Item;
 import com.ghazwan.frontend.objects.items.ItemType;
 import com.ghazwan.frontend.objects.bullets.Bullet;
 import com.ghazwan.frontend.systems.AssetManager;
+import com.ghazwan.frontend.systems.SoundManager;
 import com.ghazwan.frontend.systems.EntityFactory;
 
 public class Player extends GameObject {
@@ -184,7 +185,7 @@ public class Player extends GameObject {
             }
             // 3. Retrieve the "player_idle" animation using assets.getAnimation(...).
             //    Store it in a local variable of type Animation<TextureRegion> named anim.
-            Animation<TextureRegion> anim = assets.getAnimation("player_right");
+            Animation<TextureRegion> anim = assets.getAnimation("player_idle");
             // 4. If anim is not null, assign it using setAnimation(...).
             if (anim!=null){
                 setAnimation(anim);
@@ -198,6 +199,8 @@ public class Player extends GameObject {
         // TODO: Check whether the other received by this method is an Item
         if (other instanceof Item) {
             // TODO: Print "Player touches items" then call collectItem((Item) other)
+            //TEMPORARY ADDITIONAL ASSIGNMENT
+            SoundManager.getInstance().playSound("itemclaim1");
             collectItem((Item) other);
         }
     }
@@ -211,6 +214,7 @@ public class Player extends GameObject {
         System.out.println(name + " shoots bullet dealing " + damage + " DMG!");
         // TODO: Return a Bullet using EntityFactory
         // with the same x and y formulas as in the previous implementation
+        SoundManager.getInstance().playSound("shoot1"); //TEMPORARY ADDITIONAL ASSIGNMENT
         return EntityFactory.createPlayerBullet(x,y,damage);
     }
 

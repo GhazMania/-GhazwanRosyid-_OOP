@@ -118,7 +118,7 @@ public class AssetManager {
             // using 'new TextureRegion(...)', then call 'frame.flip(flipX, flipY)'
             TextureRegion[] frames = new TextureRegion[numFrames];
             for (int i = 0; i < numFrames; i++) {
-                frames[i] = grid[row][startCol + i];
+                frames[i] = new TextureRegion(grid[row][startCol + i]);
                 frames[i].flip(flipX, flipY);
             }
             Animation<TextureRegion> anim = new Animation<>(frameDuration, frames);
@@ -160,7 +160,7 @@ public void init() {
     // TODO: Register the Boss's idle animation (rumia.png: 64x64 per cell)
     registerAnimationFromSheet("boss_idle", "rumia.png", 64, 64, 0, 0, 4, 0.2f, LOOP);
     registerAnimationFromSheet("boss_left", "rumia.png", 64, 64, 1, 0, 4, 0.15f, REVERSED);
-    registerAnimationFromSheet("boss_idle", "rumia.png", 64, 64, 2, 0, 4, 0.15f, NORMAL);
+    registerAnimationFromSheet("boss_right", "rumia.png", 64, 64, 2, 0, 4, 0.15f, NORMAL);
 
     // TODO: Register the Fairy animations
     registerAnimationFromSheet("fairy_idle_red","fairy.png",32,32,1, 0, 8,0.125f, LOOP);
@@ -171,10 +171,18 @@ public void init() {
 
 
     // TODO: Register the 4 Item variants (items.png: 16x16 per cell)
-    registerRegionFromSheet("item1", "items.png", 16, 16, 0, 0);
-    registerRegionFromSheet("item2", "items.png", 16, 16, 0, 1);
-    registerRegionFromSheet("item3", "items.png", 16, 16, 0, 2);
-    registerRegionFromSheet("item4", "items.png", 16, 16, 0, 3);
+    registerRegionFromSheet("item_power", "items.png", 16, 16, 0, 0);
+    registerRegionFromSheet("item_point", "items.png", 16, 16, 0, 1);
+    registerRegionFromSheet("item_bomb", "items.png", 16, 16, 0, 2);
+    registerRegionFromSheet("item_life", "items.png", 16, 16, 0, 3);
+
+    // Player Bullet
+    registerRegionFromSheet("bullet_amulet", "amulet_reimu.png", 16, 16, 0, 0);
+    registerRegionFromSheet("bullet_amulet_homing", "amulet_reimu.png", 16, 16, 1, 0);
+    registerRegionFromSheet("bullet_danmaku", "bullets_small.png", 16, 16, 2, 3);
+
+    // F
+
 }
 
     public void dispose() {

@@ -3,6 +3,7 @@ package com.ghazwan.frontend.objects.enemies;
 import com.ghazwan.frontend.objects.GameObject;
 import com.ghazwan.frontend.objects.Player;
 import com.badlogic.gdx.graphics.Color;
+import com.ghazwan.frontend.systems.SoundManager;
 
 public class Enemy extends GameObject {
     String name;
@@ -18,7 +19,7 @@ public class Enemy extends GameObject {
     }
 
     public Enemy(float x, float y, float width, float height, Color color, String name, int hp, long scoreValue){
-        super(x,y,24,24,0, color);
+        super(x,y, width, height,0, color);
         this.name = name;
         this.hp = hp;
         this.maxHp = hp;
@@ -31,6 +32,7 @@ public class Enemy extends GameObject {
         this.hp -= damage;
         if (this.hp < 0) {
             this.hp = 0;
+            SoundManager.getInstance().playSound("enemy_death");
         }
         System.out.println(name + " took " + damage + " damage! HP: " + this.hp + "/" + this.maxHp);
         if (wasAlive && this.hp == 0) {
@@ -52,8 +54,10 @@ public class Enemy extends GameObject {
         // 1. Return true if hp > 0, and false otherwise
         if(this.hp>0){
             return true;
-        }else
+        }else {
+            //TEMPORARY ADDITIONAL ASSIGNMENT
             return false;
+        }
     }
 
     //Setters and Getters

@@ -95,7 +95,7 @@ public class EntityFactory {
         // TODO 2:
         // Create a new Bullet using x, y, BulletType.AMULET, and damage;
         // store it in a local variable named `bullet`.
-        Bullet bullet = new Bullet(x,y,damage,BulletType.AMULET,damage);
+        Bullet bullet = new Bullet(x,y,500f,BulletType.AMULET, damage);
 
         // TODO 3:
         // Assign sprite to bullet using bullet.setSprite(...).

@@ -14,6 +14,7 @@ import com.ghazwan.frontend.objects.Player;
 import com.badlogic.gdx.Input;
 import com.ghazwan.frontend.systems.AssetManager;
 import com.ghazwan.frontend.systems.EntityFactory;
+import com.ghazwan.frontend.systems.SoundManager;
 
 import java.util.Iterator;
 
@@ -24,9 +25,9 @@ import static com.ghazwan.frontend.systems.EntityFactory.*;
 
 public class Main extends ApplicationAdapter {
     private ShapeRenderer shapeRenderer;
+    private SpriteBatch batch;
 
     // TODO 1: Declare fields for Player, Fairy, Boss, Items, and List<GameObject>
-    SpriteBatch batch;
     Player playerObject;
     Fairy fairyObject;
     Boss bossObject;
@@ -41,30 +42,32 @@ public class Main extends ApplicationAdapter {
         // When initializing the renderer, create a SpriteBatch and store it in batch.
         // LibGDX hint: new SpriteBatch().
         batch = new SpriteBatch();
+        shapeRenderer = new ShapeRenderer();
 
         // TODO 2:
         // Initialize the fairy and entities lists as empty ArrayLists.
-        ArrayList<Fairy> fairyList = new ArrayList<>();
-        ArrayList<GameObject> entityList = new ArrayList<>();
+        entities = new ArrayList<>();
 
 
         // TODO 3:
         // Before creating entities, get the AssetManager instance and call init().
         AssetManager.getInstance().init();
+        SoundManager.getInstance().init();
 
         // TODO 4:
         // Update how all entities are created! Follow the table and create Player, Fairy, Boss, and Item
         // using the appropriate EntityFactory methods.
         // Add both Fairies to the fairy list using add(...).
-        fairyList.add(createFairy(150,380,"Red Fairy", 20));
-        fairyList.add(createFairy(250, 380, "Blue Fairy", 20, "fairy_idle_blue"));
+        entities.add(createFairy(150,380,"Red Fairy", 20));
+        entities.add(createFairy(250, 380, "Blue Fairy", 20, "fairy_idle_blue"));
 
         // TODO 5:
         // Add all the objects you have just created to entities.
-        entityList.add(createPlayer(280, 40, "Reimu Hakurei", 100, 15, 3));
-        entityList.add(createBoss(380, 400, "Rumia", 150));
-        entityList.add(createItem(200, 450, ItemType.POWER));
-        entityList.add(createItem(320, 480, ItemType.POINT));
+        playerObject = createPlayer(280, 40, "Reimu Hakurei", 100, 15, 3);
+        entities.add(playerObject);
+        entities.add(createBoss(380, 400, "Rumia", 150));
+        entities.add(createItem(200, 450, ItemType.POWER));
+        entities.add(createItem(320, 480, ItemType.POINT));
     }
 
 
@@ -95,6 +98,8 @@ public class Main extends ApplicationAdapter {
     @Override
     public void render() {
         float delta = Gdx.graphics.getDeltaTime();
+        //TEMPORARY ADDITIONAL ASSIGNMENT
+        SoundManager.getInstance().playMusic("badapple");
 
         // TODO 1: If the Z key was just pressed, add a new bullet from player.shootBullet()
         // to the entities list.
@@ -157,5 +162,6 @@ public class Main extends ApplicationAdapter {
 
         // TODO: Call dispose on AssetManager to release the loaded Textures as well.
         AssetManager.getInstance().dispose();
+        SoundManager.getInstance().dispose();
     }
 }
