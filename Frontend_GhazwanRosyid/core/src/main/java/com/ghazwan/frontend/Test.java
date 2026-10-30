@@ -6,6 +6,7 @@ import com.ghazwan.frontend.objects.enemies.Fairy;
 import com.ghazwan.frontend.objects.items.Item;
 import com.ghazwan.frontend.objects.Player;
 import com.ghazwan.frontend.objects.bullets.Bullet;
+import com.ghazwan.frontend.systems.BulletManager;
 
 public class Test {
     public static void main(String[] args) {
@@ -63,11 +64,5 @@ public class Test {
         System.out.println("Final Score: " + reimu2.getScore() + " pts");
 
         System.out.println("\n=== Module 2 Test Completed Successfully ===");
-
-        Bullet bullet = reimu.shootBullet();
-        System.out.println("Bullet created at: (" + bullet.getX() + ", " + bullet.getY() + ") | Damage: " + bullet.getDamage());
-        bullet.update(0.1f);
-        System.out.println("Bullet Y after 0.1s: " + bullet.getY());
-        System.out.println("Is bullet off screen? " + bullet);
     }
 }

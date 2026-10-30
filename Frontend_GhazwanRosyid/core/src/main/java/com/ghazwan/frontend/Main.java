@@ -12,9 +12,7 @@ import com.ghazwan.frontend.objects.items.ItemType;
 import com.ghazwan.frontend.objects.GameObject;
 import com.ghazwan.frontend.objects.Player;
 import com.badlogic.gdx.Input;
-import com.ghazwan.frontend.systems.AssetManager;
-import com.ghazwan.frontend.systems.EntityFactory;
-import com.ghazwan.frontend.systems.SoundManager;
+import com.ghazwan.frontend.systems.*;
 
 import java.util.Iterator;
 
@@ -30,11 +28,14 @@ public class Main extends ApplicationAdapter {
     // TODO 1: Declare fields for Player, Fairy, Boss, Items, and List<GameObject>
     Player playerObject;
     Fairy fairyObject;
-    Boss bossObject;
+    Boss boss;
     Item itemObject;
     Item powerItem;
     Item pointItem;
     List<GameObject> entities;
+    private float enemyShootTimer = 0f;
+    BulletManager bulletManager;
+    CollisionReferee collisionReferee;
 
     @Override
     public void create() {
@@ -47,8 +48,8 @@ public class Main extends ApplicationAdapter {
         // TODO 2:
         // Initialize the fairy and entities lists as empty ArrayLists.
         entities = new ArrayList<>();
-
-
+        bulletManager = new BulletManager();
+        collisionReferee = new CollisionReferee();
         // TODO 3:
         // Before creating entities, get the AssetManager instance and call init().
         AssetManager.getInstance().init();
@@ -65,7 +66,7 @@ public class Main extends ApplicationAdapter {
         // Add all the objects you have just created to entities.
         playerObject = createPlayer(280, 40, "Reimu Hakurei", 100, 15, 3);
         entities.add(playerObject);
-        entities.add(createBoss(380, 400, "Rumia", 150));
+        entities.add(createBoss(380, 400, "Cirno", 150));
         entities.add(createItem(200, 450, ItemType.POWER));
         entities.add(createItem(320, 480, ItemType.POINT));
     }
@@ -95,6 +96,14 @@ public class Main extends ApplicationAdapter {
 
     }
 
+    private void updateEnemyScheduler(float delta) {
+        enemyShootTimer += delta;
+        if (enemyShootTimer >= 1.5f) {
+            boss.shootBullet(bulletManager);
+            enemyShootTimer = 0f;
+        }
+    }
+
     @Override
     public void render() {
         float delta = Gdx.graphics.getDeltaTime();
@@ -105,27 +114,21 @@ public class Main extends ApplicationAdapter {
         // to the entities list.
         // Clue: Gdx.input.isKeyJustPressed()z
         if (Gdx.input.isKeyJustPressed(Input.Keys.Z)){
-            entities.add(playerObject.shootBullet());
+            playerObject.shootBullet(bulletManager);
         }
 
-        // TODO 2: Call updateAndClean(entities, delta, Gdx.graphics.getWidth(), Gdx.graphics.getHeight())
-        // to update and clean up destroyed/off-screen entities.
+        // TODO: Periodic firing scheduler for Boss Rumia
+        updateEnemyScheduler(delta);
+
+        // TODO: Generic update & clean for standard entities (Player, Enemy, Item)
         updateAndClean(entities, delta, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-        // 3. Collision detection between entities (skip entities that are already destroyed)
-        for (int i = 0; i < entities.size(); i++) {
-            for (int j = i + 1; j < entities.size(); j++) {
-                GameObject a = entities.get(i);
-                GameObject b = entities.get(j);
+        // TODO: Update and recycle Object Pool
+        bulletManager.update(delta, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-                if (!a.isDestroyed() && !b.isDestroyed()) {
-                    if (a.getCoreHitbox().overlaps(b.getCoreHitbox())) {
-                        a.onCollision(b);
-                        b.onCollision(a);
-                    }
-                }
-            }
-        }
+        // TODO: Evaluate & resolve all collisions via
+        // Mediator Pattern
+        collisionReferee.resolveCollisions(playerObject,entities,bulletManager);
 
         ScreenUtils.clear(0.1f, 0.1f, 0.15f, 1f);
 
@@ -149,6 +152,10 @@ public class Main extends ApplicationAdapter {
                 entity.render(batch);
             }
         }
+
+        // TODO: Render all active bullets from the pool
+        bulletManager.render(batch);
+
         batch.end();
     }
 
