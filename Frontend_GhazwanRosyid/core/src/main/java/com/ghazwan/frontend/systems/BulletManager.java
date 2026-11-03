@@ -50,7 +50,7 @@ public class BulletManager {
         // 1. Check whether enemyBulletPool is not empty:
         //    If so, poll from the pool. If not, create a new one using the Factory.
         if(!enemyBulletPool.isEmpty()){
-            bullet = playerBulletPool.poll();
+            bullet = enemyBulletPool.poll();
         } else
             bullet = EntityFactory.createEnemyBullet(x,y,damage);
         // 2. Re-initialize the bullet.
@@ -91,13 +91,13 @@ public class BulletManager {
         // - Follow the exact same procedure as above for activeEnemyBullets
         // - Enemy bullets that go off-screen or are destroyed are returned to enemyBulletPool via offer()
         Iterator<Bullet> itr2 = activeEnemyBullets.iterator();
-        while(itr.hasNext())
+        while(itr2.hasNext())
         {
             Bullet target = itr2.next();
             target.update(delta);
             if (target.isOffScreen(screenWidth,screenHeight)|| target.isDestroyed()){
                 System.out.println("Removed via Generic Iterator: "+ target.getClass().getSimpleName());
-                itr.remove();
+                itr2.remove();
                 target.destroy();
                 enemyBulletPool.offer(target);
             }

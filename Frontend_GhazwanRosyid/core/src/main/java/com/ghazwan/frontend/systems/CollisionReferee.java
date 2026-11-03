@@ -30,7 +30,7 @@ public class CollisionReferee {
                         enemy.takeDamage(bullet.getDamage());
                         player.addScore(enemy.getScoreValue());
                         // Bullet gets marked to be destroyed
-                        bullet.isDestroyed();
+                        bullet.destroy();
                         newDrops.add(EntityFactory.createItem(enemy.getX(), enemy.getY(), ItemType.POWER));
                     }
                 }
@@ -47,13 +47,12 @@ public class CollisionReferee {
                         // Enemy takes damage, player gets score, etc.
                         player.takeDamage(bullet.getDamage());
                         // Bullet gets marked to be destroyed
-                        bullet.isDestroyed();
+                        bullet.destroy();
                     }
                     if (!bullet.hasBeenGrazed() && bullet.getCoreHitbox().overlaps(player.getGrazeHitbox())) {
                         // Core Business Logic:
                         // Enemy takes damage, player gets score, etc.
                         bullet.setGrazed(true);
-                        // Bullet gets marked to be destroyed
                         player.addScore(50);
                     }
                 }

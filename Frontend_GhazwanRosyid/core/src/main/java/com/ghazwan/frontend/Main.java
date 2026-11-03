@@ -28,7 +28,7 @@ public class Main extends ApplicationAdapter {
     // TODO 1: Declare fields for Player, Fairy, Boss, Items, and List<GameObject>
     Player playerObject;
     Fairy fairyObject;
-    Boss boss;
+    Boss bossObject;
     Item itemObject;
     Item powerItem;
     Item pointItem;
@@ -65,10 +65,14 @@ public class Main extends ApplicationAdapter {
         // TODO 5:
         // Add all the objects you have just created to entities.
         playerObject = createPlayer(280, 40, "Reimu Hakurei", 100, 15, 3);
+        bossObject = createBoss(380, 400, "Reimu", 150);
+        powerItem = createItem(200, 450, ItemType.POWER);
+        pointItem = createItem(320, 480, ItemType.POINT);
+
         entities.add(playerObject);
-        entities.add(createBoss(380, 400, "Cirno", 150));
-        entities.add(createItem(200, 450, ItemType.POWER));
-        entities.add(createItem(320, 480, ItemType.POINT));
+        entities.add(bossObject);
+        entities.add(powerItem);
+        entities.add(pointItem);
     }
 
 
@@ -99,7 +103,7 @@ public class Main extends ApplicationAdapter {
     private void updateEnemyScheduler(float delta) {
         enemyShootTimer += delta;
         if (enemyShootTimer >= 1.5f) {
-            boss.shootBullet(bulletManager);
+            bossObject.shootBullet(bulletManager);
             enemyShootTimer = 0f;
         }
     }
