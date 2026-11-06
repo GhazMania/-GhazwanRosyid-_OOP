@@ -5,6 +5,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.ghazwan.frontend.commands.Command;
+import com.ghazwan.frontend.commands.InputHandler;
 import com.ghazwan.frontend.objects.enemies.Boss;
 import com.ghazwan.frontend.objects.enemies.Fairy;
 import com.ghazwan.frontend.objects.items.Item;
@@ -13,6 +15,7 @@ import com.ghazwan.frontend.objects.GameObject;
 import com.ghazwan.frontend.objects.Player;
 import com.badlogic.gdx.Input;
 import com.ghazwan.frontend.systems.*;
+import com.ghazwan.frontend.ui.GameHUD;
 
 import java.util.Iterator;
 
@@ -26,16 +29,19 @@ public class Main extends ApplicationAdapter {
     private SpriteBatch batch;
 
     // TODO 1: Declare fields for Player, Fairy, Boss, Items, and List<GameObject>
-    Player playerObject;
-    Fairy fairyObject;
-    Boss bossObject;
-    Item itemObject;
+    Player player;
+    Fairy fairy;
+    Fairy fairy2;
+    Boss boss;
+    Item item;
     Item powerItem;
     Item pointItem;
     List<GameObject> entities;
     private float enemyShootTimer = 0f;
     BulletManager bulletManager;
     CollisionReferee collisionReferee;
+    private InputHandler inputHandler;
+    private GameHUD gameHUD;
 
     @Override
     public void create() {
@@ -50,6 +56,8 @@ public class Main extends ApplicationAdapter {
         entities = new ArrayList<>();
         bulletManager = new BulletManager();
         collisionReferee = new CollisionReferee();
+        inputHandler = new InputHandler();
+        gameHUD = new GameHUD();
         // TODO 3:
         // Before creating entities, get the AssetManager instance and call init().
         AssetManager.getInstance().init();
@@ -59,20 +67,24 @@ public class Main extends ApplicationAdapter {
         // Update how all entities are created! Follow the table and create Player, Fairy, Boss, and Item
         // using the appropriate EntityFactory methods.
         // Add both Fairies to the fairy list using add(...).
-        entities.add(createFairy(150,380,"Red Fairy", 20));
+        entities.add(createFairy(150, 380, "Red Fairy", 20));
         entities.add(createFairy(250, 380, "Blue Fairy", 20, "fairy_idle_blue"));
 
         // TODO 5:
         // Add all the objects you have just created to entities.
-        playerObject = createPlayer(280, 40, "Reimu Hakurei", 100, 15, 3);
-        bossObject = createBoss(380, 400, "Reimu", 150);
-        powerItem = createItem(200, 450, ItemType.POWER);
-        pointItem = createItem(320, 480, ItemType.POINT);
+        player = createPlayer(200, 50, "Reimu Hakurei", 100, 15, 3);
+        boss = createBoss(250, 400, "Rumia", 150);
+        powerItem = createItem(180, 450, ItemType.POWER);
+        pointItem = createItem(220, 480, ItemType.POINT);
 
-        entities.add(playerObject);
-        entities.add(bossObject);
+        player.registerObserver(gameHUD);
+
+        entities.add(player);
+        entities.add(boss);
         entities.add(powerItem);
         entities.add(pointItem);
+        inputHandler.setEntities(entities);
+
     }
 
 
@@ -103,14 +115,38 @@ public class Main extends ApplicationAdapter {
     private void updateEnemyScheduler(float delta) {
         enemyShootTimer += delta;
         if (enemyShootTimer >= 1.5f) {
-            bossObject.shootBullet(bulletManager);
+            boss.shootBullet(bulletManager);
             enemyShootTimer = 0f;
         }
     }
 
+    private void restartGame() {
+        System.out.println("[Main] Restarting game...");
+        entities.clear();
+        bulletManager.clearEnemyBullets();
+        bulletManager.clearPlayerBullets();
+        entities.add(player);
+        player.resetGame();
+
+        entities.add(createFairy(150, 380, "Red Fairy", 20));
+        entities.add(createFairy(250, 380, "Blue Fairy", 20, "fairy_idle_blue")); //CLEAR TEMPORARY
+        boss = EntityFactory.createBoss(250, 400, "Rumia", 150);
+        powerItem = EntityFactory.createItem(180, 450, ItemType.POWER);
+        pointItem = EntityFactory.createItem(220, 480, ItemType.POINT);
+
+        entities.add(boss);
+        entities.add(powerItem);
+        entities.add(pointItem);
+    }
+
+
     @Override
     public void render() {
         float delta = Gdx.graphics.getDeltaTime();
+
+        if(Gdx.input!=null && Gdx.input.isKeyJustPressed(Input.Keys.R) && player.isGameOver()){
+            restartGame();
+        }
         //TEMPORARY ADDITIONAL ASSIGNMENT
         SoundManager.getInstance().playMusic("badapple");
 
@@ -118,7 +154,12 @@ public class Main extends ApplicationAdapter {
         // to the entities list.
         // Clue: Gdx.input.isKeyJustPressed()z
         if (Gdx.input.isKeyJustPressed(Input.Keys.Z)){
-            playerObject.shootBullet(bulletManager);
+            player.shootBullet(bulletManager);
+        }
+
+        List<Command> commands = inputHandler.handleInput(delta);
+        for(Command command:commands){
+            command.execute(player, bulletManager);
         }
 
         // TODO: Periodic firing scheduler for Boss Rumia
@@ -132,7 +173,7 @@ public class Main extends ApplicationAdapter {
 
         // TODO: Evaluate & resolve all collisions via
         // Mediator Pattern
-        collisionReferee.resolveCollisions(playerObject,entities,bulletManager);
+        collisionReferee.resolveCollisions(player,entities,bulletManager);
 
         ScreenUtils.clear(0.1f, 0.1f, 0.15f, 1f);
 
@@ -161,6 +202,9 @@ public class Main extends ApplicationAdapter {
         bulletManager.render(batch);
 
         batch.end();
+
+        gameHUD.renderBackground();
+        player.renderFocusIndicator(gameHUD.getShapeRenderer());
     }
 
 

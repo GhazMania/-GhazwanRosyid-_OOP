@@ -1,8 +1,10 @@
 package com.ghazwan.frontend.systems;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.ghazwan.frontend.objects.GameObject;
 import com.ghazwan.frontend.objects.bullets.Bullet;
 import com.ghazwan.frontend.objects.bullets.BulletType;
+import com.ghazwan.frontend.objects.items.ItemType;
 
 import java.util.*;
 
@@ -114,6 +116,48 @@ public class BulletManager {
             if (!b.isDestroyed()) b.render(batch);
         }
     }
+
+    // Spell Card (Bomb) Execution: Clear all active enemy bullets and convert them into POINT item drops!
+    public void clearEnemyBullets(List<GameObject> entities) {
+        // TODO:
+        // 1. Create an Iterator<Bullet> to safely traverse activeEnemyBullets.
+        Iterator<Bullet> itr = activeEnemyBullets.iterator();
+        // 2. While the iterator has a next element:
+        //    - Retrieve the current Bullet object.
+        //    - If the entities parameter is not null:
+        //      * Create an Item object of type ItemType.POINT using EntityFactory.createItem(...)
+        //        at position (bullet.getX(), bullet.getY()), then add it to the entities list.
+        //    - Mark the bullet as destroyed (bullet.destroy()).
+        //    - Remove the bullet from activeEnemyBullets using remove() on the iterator from step 1.
+        //    - Return the bullet to the enemyBulletPool queue using offer().
+        // TIP: See the rough outline in `clearPlayerBullets()` below
+        while(itr.hasNext())
+        {
+            Bullet bullet = itr.next();
+            if (bullet!=null){
+                entities.add(EntityFactory.createItem(bullet.getX(), bullet.getY(), ItemType.POINT));
+            }
+            bullet.destroy();
+            itr.remove();
+            enemyBulletPool.offer(bullet);
+        }
+    }
+
+    public void clearEnemyBullets() {
+        clearEnemyBullets(null);
+    }
+
+    // Clear all player bullets when restarting the game (Copy-Paste):
+    public void clearPlayerBullets() {
+        Iterator<Bullet> pIter = activePlayerBullets.iterator();
+        while (pIter.hasNext()) {
+            Bullet bullet = pIter.next();
+            bullet.destroy();
+            pIter.remove();
+            playerBulletPool.offer(bullet);
+        }
+    }
+
 
     // Helper methods to access pools and active lists
     public List<Bullet> getActivePlayerBullets() { return activePlayerBullets; }
