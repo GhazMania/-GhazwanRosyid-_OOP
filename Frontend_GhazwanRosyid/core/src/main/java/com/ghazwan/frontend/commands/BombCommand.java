@@ -18,7 +18,7 @@ public class BombCommand implements Command {
 
     public void setEntities(List<GameObject> entities) {
         // TODO: Set entities according to the parameter
-        setEntities(entities);
+        this.entities = entities;
     }
 
     // TODO: Override `execute` with the following business logic:

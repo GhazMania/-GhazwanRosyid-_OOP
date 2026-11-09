@@ -153,9 +153,6 @@ public class Main extends ApplicationAdapter {
         // TODO 1: If the Z key was just pressed, add a new bullet from player.shootBullet()
         // to the entities list.
         // Clue: Gdx.input.isKeyJustPressed()z
-        if (Gdx.input.isKeyJustPressed(Input.Keys.Z)){
-            player.shootBullet(bulletManager);
-        }
 
         List<Command> commands = inputHandler.handleInput(delta);
         for(Command command:commands){
@@ -201,6 +198,8 @@ public class Main extends ApplicationAdapter {
         // TODO: Render all active bullets from the pool
         bulletManager.render(batch);
 
+        gameHUD.render(batch);
+
         batch.end();
 
         gameHUD.renderBackground();
@@ -216,6 +215,7 @@ public class Main extends ApplicationAdapter {
         }
 
         // TODO: Call dispose on AssetManager to release the loaded Textures as well.
+        gameHUD.dispose();
         AssetManager.getInstance().dispose();
         SoundManager.getInstance().dispose();
     }

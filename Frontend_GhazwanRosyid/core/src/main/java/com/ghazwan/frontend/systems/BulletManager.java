@@ -134,7 +134,7 @@ public class BulletManager {
         while(itr.hasNext())
         {
             Bullet bullet = itr.next();
-            if (bullet!=null){
+            if (entities!=null){
                 entities.add(EntityFactory.createItem(bullet.getX(), bullet.getY(), ItemType.POINT));
             }
             bullet.destroy();
