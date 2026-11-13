@@ -104,6 +104,14 @@ public abstract class GameObject implements Collidable {
         return speed;
     }
 
+    public void setActive(boolean active) { this.active = active; }
+
+    public boolean isActive() { return active; }
+
+    public float getStateTime() { return stateTime; }
+    public void setStateTime(float stateTime) { this.stateTime = stateTime; }
+
+
     //Module 6 Setters and getters
     public TextureRegion getSprite() {
         return sprite;

@@ -5,6 +5,7 @@ import com.ghazwan.frontend.objects.enemies.Enemy;
 import com.ghazwan.frontend.objects.Collidable;
 import com.ghazwan.frontend.objects.GameObject;
 import com.badlogic.gdx.graphics.Color;
+import com.ghazwan.frontend.objects.patterns.bulletStrategy.BulletMovementPattern;
 
 public class Bullet extends GameObject {
     private BulletType bulletType;
@@ -14,6 +15,8 @@ public class Bullet extends GameObject {
     private float angle;
     boolean isPlayerBullet;
     boolean grazed;
+    private BulletMovementPattern movementPattern;
+
 
     // Constructor with default speed (speed = 400f)
     public Bullet(float x, float y, BulletType bulletType, int damage) {
@@ -53,11 +56,21 @@ public class Bullet extends GameObject {
     }
 
 
+    @Override
     public void update(float delta) {
-        // TODO: increase the y position by speed * delta (bullet moves upward)
-        this.x = x+vx*delta;
-        this.y = y+vy*delta;
+        super.update(delta);
+        // TODO (6 points):
+        // Check whether movementPattern is not null:
+        // - If present (not null): delegate movement to movementPattern.move(this, delta);
+        // - If null: retain default movement (add vx * delta to x and vy * delta to y)
+        if (movementPattern!=null){
+            movementPattern.move(this,delta);
+        } else {
+            this.x = x+vx*delta;
+            this.y = y+vy*delta;
+        }
     }
+
 
     public int getDamage() {
         return damage;
@@ -94,6 +107,10 @@ public class Bullet extends GameObject {
     public void setGrazed(boolean grazed) {
         this.grazed = grazed;
     }
+
+    public BulletMovementPattern getMovementPattern() { return movementPattern; }
+    public void setMovementPattern(BulletMovementPattern movementPattern) { this.movementPattern = movementPattern; }
+
 
     @Override
     public void onCollision(Collidable other) {
@@ -133,6 +150,8 @@ public class Bullet extends GameObject {
 
         // 6. Make sure the grazed status is reset to inactive so this recycled bullet can be grazed again
         this.grazed=false;
+        this.movementPattern = null;
+
     }
 
     @Override
