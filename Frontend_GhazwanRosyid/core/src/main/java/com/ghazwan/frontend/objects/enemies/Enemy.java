@@ -5,6 +5,7 @@ import com.ghazwan.frontend.objects.GameObject;
 import com.ghazwan.frontend.objects.Player;
 import com.badlogic.gdx.graphics.Color;
 import com.ghazwan.frontend.objects.patterns.ShootingPattern;
+import com.ghazwan.frontend.objects.patterns.entityStrategy.EntityMovementPattern;
 import com.ghazwan.frontend.systems.SoundManager;
 
 public class Enemy extends EntityShooter {
